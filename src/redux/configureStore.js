@@ -8,6 +8,6 @@ export default function configureStore(initialState) {
     return createStore(
         rootReducer,
         initialState,
-        componseEnhancers(applyMiddleware(reduxImutableStateInvariant())) // warns if we accidentally mutate Redux state
+        composeEnhancers(applyMiddleware(reduxImutableStateInvariant())) // warns if we accidentally mutate Redux state
     );
 }
