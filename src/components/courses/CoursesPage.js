@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import * as courseActions from "../../redux/actions/courseActions";
+import PropTypes from "prop-types";
 
 class CoursesPage extends Component {
     state = {
@@ -15,7 +18,7 @@ class CoursesPage extends Component {
     // Arrow function fixed binding error in shorter form then using the handleChange function above
     handleSubmit = event => {
         event.preventDefault();
-        alert(this.state.course.title);
+        this.props.dispatch(courseActions.createCourse(this.state.course)); // actions need to be dispatched
     };
 
     render() {
@@ -34,4 +37,21 @@ class CoursesPage extends Component {
     }
 }
 
-export default CoursesPage;
+CoursesPage.PropTypes = {
+    dispatch: PropTypes.func.isRequired // Expect dispatch to be passed in to the CoursesPage component if MapDispatchToProps is ommitted in connect
+};
+
+function mapStateToProps(state, ownProps) {
+    // Determines what part of state is exposed to the component
+    return {
+        courses: state.courses // Request only the data that is needed for component. Component will use this to rerender when it sees a change
+    };
+}
+
+export default connect(
+    mapStateToProps
+    // mapDispatchToProps // Optional function that lets us decide what actions to pass to our component on props
+)(CoursesPage); // connect returns a function and that function then calls our component
+// // The above is the same as writing
+// const connectedStateAndProps = connect(mapStateToProps, mapDispatchToProps)
+// export default connectedStateAndProps(CoursesPage);
